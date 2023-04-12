@@ -2,7 +2,6 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from "mongoose";
 import multer from 'multer'
-
 import dotenv from 'dotenv'
 
 import {
@@ -19,8 +18,8 @@ import * as UserController from './controllers/userController.js'
 import * as PostController from './controllers/PostController.js'
 import * as CommentController from './controllers/CommentController.js'
 
-dotenv.config({path: ".env"})
-        mongoose.connect(process.env.MONGODB_URL).then(() => console.log("DB ok")).catch((error) => console.log(error))
+// dotenv.config({path: ".env"})
+        mongoose.connect('mongodb+srv://admin:wwwwww@cluster0.k09ry4k.mongodb.net/?retryWrites=true&w=majority').then(() => console.log("DB ok")).catch((error) => console.log(error))
 const app = express()
 
 
@@ -72,7 +71,7 @@ app.post('/comments/:id', checkAuth, commentCreateValidation, CommentController.
 app.get('/posts/comments/:id', CommentController.getCommentByPost)
 app.get('/comments', CommentController.getAllComments)
 
-app.listen(process.env.PORT || 4444, (err) => {
+app.listen(4444, (err) => {
     if (err) {
         return console.log(err)
     }
