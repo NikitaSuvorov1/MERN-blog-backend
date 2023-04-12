@@ -1,10 +1,9 @@
+
 {
   "name": "mern-blog",
   "version": "1.0.0",
   "main": "index.js",
-  "engines": {
-    "node": "14.x"
-  },
+
   "type": "module",
   "scripts": {
     "start": "node index.js",
