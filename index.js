@@ -3,6 +3,7 @@ import cors from 'cors'
 import mongoose from "mongoose";
 import multer from 'multer'
 import dotenv from 'dotenv'
+import fs from 'fs'
 
 import {
     registerValidation,
@@ -47,7 +48,7 @@ app.post('/auth/login', loginValidation, UserController.login)
 app.post('/auth/register', registerValidation, UserController.register)
 app.get('/auth/me', checkAuth, UserController.getMe)
 
-app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
+app.post('/upload',  upload.single('image'), (req, res) => {
     res.json({
         url: `/uploads/${req.file.originalname}`,
     });
