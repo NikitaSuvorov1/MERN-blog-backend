@@ -68,7 +68,7 @@ app.post('/comments/:id', checkAuth, commentCreateValidation, CommentController.
 app.get('/posts/comments/:id', CommentController.getCommentByPost)
 app.get('/comments', CommentController.getAllComments)
 
-app.listen(4444, (err) => {
+app.listen(process.env.PORT || 4444, (err) => {
     if (err) {
         return console.log(err)
     }
