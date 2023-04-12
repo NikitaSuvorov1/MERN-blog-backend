@@ -41,9 +41,7 @@ export const getPostsByTags = async (req,res) => {
 export const getPostBySort = async (req,res) => {
     try {
         const sortType = req.params.sortType;
-        console.log(sortType)
         const posts = await PostModel.find().sort({viewsCount: -1}).populate('user').exec()
-        console.log(posts)
         res.json(posts)
     } catch (err) {
         res.status(403).json({

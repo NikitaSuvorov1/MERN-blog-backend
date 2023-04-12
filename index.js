@@ -18,12 +18,11 @@ import * as UserController from './controllers/userController.js'
 import * as PostController from './controllers/PostController.js'
 import * as CommentController from './controllers/CommentController.js'
 
-// dotenv.config({path: ".env"})
-        mongoose.connect('mongodb+srv://admin:wwwwww@cluster0.k09ry4k.mongodb.net/?retryWrites=true&w=majority').then(() => console.log("DB ok")).catch((error) => console.log(error))
+dotenv.config({path: ".env"})
+mongoose.connect(process.env.MONGODB_URL).then(() => console.log("DB ok")).catch((error) => console.log(error))
 const app = express()
 
 
-console.log(process.env.MONGODB_URL)
 
 const storage = multer.diskStorage({
     destination: (_, __, cb) => {
