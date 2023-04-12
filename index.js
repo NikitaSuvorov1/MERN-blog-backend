@@ -23,6 +23,7 @@ dotenv.config({path: ".env"})
         mongoose.connect(process.env.MONGODB_URL).then(() => console.log("DB ok")).catch((error) => console.log(error))
 const app = express()
 
+
 console.log(process.env.MONGODB_URL)
 
 const storage = multer.diskStorage({
@@ -77,3 +78,4 @@ app.listen(process.env.PORT || 4444, (err) => {
     }
     console.log("server ok")
 })
+

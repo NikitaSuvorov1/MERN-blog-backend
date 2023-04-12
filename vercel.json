@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "name": "mern-blog",
+  "name": "music-album",
   "builds": [
-    { "src": "*.js", "use": "@vercel/node" }
-
+    { "src": "index.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/" }
+    { "src": "/(.*)", "dest": "/index.js" }
   ]
 }
