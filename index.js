@@ -20,7 +20,7 @@ import * as CommentController from './controllers/CommentController.js'
 
 
 ///'mongodb+srv://admin:wwwwww@cluster0.k09ry4k.mongodb.net/blog?retryWrites=true&w=majority'
-        mongoose.connect(process.env.MONGODB_URI).then(() => console.log("DB ok")).catch((error) => console.log(error))
+        mongoose.connect('mongodb+srv://admin:wwwwww@cluster0.k09ry4k.mongodb.net/blog?retryWrites=true&w=majority').then(() => console.log("DB ok")).catch((error) => console.log(error))
 const app = express()
 
 const storage = multer.diskStorage({
