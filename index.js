@@ -30,18 +30,27 @@ const app = express()
 //     next();
 // });
 
-const storage = multer.diskStorage({
-    destination: (_, __, cb) => {
-        if (!fs.existsSync('uploads')) {
-            fs.mkdirSync('uploads');
-        }
-        cb(null, './uploads');
-    },
-    filename: (_, file, cb) => {
-        cb(null, file.originalname);
-    },
-});
+// const storage = multer.diskStorage({
+//     destination: (_, __, cb) => {
+//         if (!fs.existsSync('uploads')) {
+//             fs.mkdirSync('uploads');
+//         }
+//         cb(null, './uploads');
+//     },
+//     filename: (_, file, cb) => {
+//         cb(null, file.originalname);
+//     },
+// });
 
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+})
 
 const upload = multer({ storage: storage });
 
@@ -53,8 +62,14 @@ app.post('/auth/login', loginValidation, UserController.login)
 app.post('/auth/register', registerValidation, UserController.register)
 app.get('/auth/me', checkAuth, UserController.getMe)
 
+// app.post('/upload',  upload.single('img'), (req, res) => {
+//     res.send({
+//         url: `/uploads/${req.file.originalname}`,
+//     });
+// });
+
 app.post('/upload',  upload.single('img'), (req, res) => {
-    res.json({
+    res.send({
         url: `/uploads/${req.file.originalname}`,
     });
 });
@@ -79,7 +94,7 @@ app.post('/comments/:id', checkAuth, commentCreateValidation, CommentController.
 app.get('/posts/comments/:id', CommentController.getCommentByPost)
 app.get('/comments', CommentController.getAllComments)
 
-app.listen(process.env.PORT, (err) => {
+app.listen(process.env.PORT || 4444, (err) => {
     if (err) {
         return console.log(err)
     }
