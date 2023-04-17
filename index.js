@@ -68,11 +68,15 @@ app.get('/auth/me', checkAuth, UserController.getMe)
 //     });
 // });
 
-app.post('/upload',  upload.single('img'), (req, res) => {
-    res.send({
-        url: `/uploads/${req.file.originalname}`,
-    });
-});
+app.post('/upload', upload.single('img'), (req, res, next) => {
+    const file = req.file;
+    if (!file) {
+        const error = new Error('Выберите файл');
+        error.httpStatusCode = 400;
+        return next(error);
+    }
+    res.send(file);
+})
 
 app.post('/upload/avatarUrl', upload.single("img"), (req, res) => {
     res.json({
