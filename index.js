@@ -35,7 +35,7 @@ const storage = multer.diskStorage({
         if (!fs.existsSync('uploads')) {
             fs.mkdirSync('uploads');
         }
-        cb(null, 'uploads');
+        cb(null, './uploads');
     },
     filename: (_, file, cb) => {
         cb(null, file.originalname);
@@ -43,7 +43,7 @@ const storage = multer.diskStorage({
 });
 
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 app.use(cors());
 app.use(express.json())
@@ -53,13 +53,13 @@ app.post('/auth/login', loginValidation, UserController.login)
 app.post('/auth/register', registerValidation, UserController.register)
 app.get('/auth/me', checkAuth, UserController.getMe)
 
-app.post('/upload',  upload.single('image'), (req, res) => {
+app.post('/upload',  upload.single('img'), (req, res) => {
     res.json({
         url: `/uploads/${req.file.originalname}`,
     });
 });
 
-app.post('/upload/avatarUrl', upload.single("image"), (req, res) => {
+app.post('/upload/avatarUrl', upload.single("img"), (req, res) => {
     res.json({
         url: `/uploads/${req.file.originalname}`,
     });
