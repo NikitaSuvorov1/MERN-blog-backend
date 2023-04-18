@@ -23,6 +23,7 @@ dotenv.config({path: ".env"})
 mongoose.connect(process.env.MONGODB_URL).then(() => console.log("DB ok")).catch((error) => console.log(error))
 const app = express()
 
+const port = process.env.PORT || 4444
 // app.use(function(req, res, next) {
 //     res.header("Access-Control-Allow-Origin", "*");
 //     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -30,53 +31,36 @@ const app = express()
 //     next();
 // });
 
-// const storage = multer.diskStorage({
-//     destination: (_, __, cb) => {
-//         if (!fs.existsSync('uploads')) {
-//             fs.mkdirSync('uploads');
-//         }
-//         cb(null, './uploads');
-//     },
-//     filename: (_, file, cb) => {
-//         cb(null, file.originalname);
-//     },
-// });
-
-
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './uploads')
+    destination: (_, __, cb) => {
+        if (!fs.existsSync('uploads')) {
+            fs.mkdirSync('uploads');
+        }
+        cb(null, 'uploads');
     },
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now())
-    }
-})
+    filename: (_, file, cb) => {
+        cb(null, file.originalname);
+    },
+});
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
+app.use('/uploads', express.static('uploads'));
 app.use(cors());
 app.use(express.json())
-app.use('/uploads', express.static('uploads'));
+
+app.post('/upload', upload.single("img"), (req, res) => {
+    console.log(req)
+    res.json({
+        url: `/uploads/${req.file.originalname}`,
+    });
+});
 
 app.post('/auth/login', loginValidation, UserController.login)
 app.post('/auth/register', registerValidation, UserController.register)
 app.get('/auth/me', checkAuth, UserController.getMe)
 
-// app.post('/upload',  upload.single('img'), (req, res) => {
-//     res.send({
-//         url: `/uploads/${req.file.originalname}`,
-//     });
-// });
 
-app.post('/upload', upload.single('img'), (req, res, next) => {
-    const file = req.file;
-    if (!file) {
-        const error = new Error('Выберите файл');
-        error.httpStatusCode = 400;
-        return next(error);
-    }
-    res.send(file);
-})
 
 app.post('/upload/avatarUrl', upload.single("img"), (req, res) => {
     res.json({
@@ -98,10 +82,10 @@ app.post('/comments/:id', checkAuth, commentCreateValidation, CommentController.
 app.get('/posts/comments/:id', CommentController.getCommentByPost)
 app.get('/comments', CommentController.getAllComments)
 
-app.listen(process.env.PORT || 4444, (err) => {
+app.listen(port, (err) => {
     if (err) {
         return console.log(err)
     }
-    console.log("server ok")
+    console.log(`server started at ${port}`)
 })
 
