@@ -4,12 +4,11 @@ import CommentModel from "../models/Comment.js";
 
 export const getLastTags = async (req, res) => {
     try {
-        const posts = await PostModel.find().limit(5).exec()
+        const posts = await PostModel.find()
+        // console.log(posts)
         const tags = posts
             .map((obj) => obj.tags)
-            .flat()
-        
-
+            // .flat()
         res.json(tags);
     } catch (err) {
         console.log(err);
